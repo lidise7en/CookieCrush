@@ -133,6 +133,7 @@ class Level {
                 }
             }
         }
+        possibleSwaps = set
     }
     
     //helper class for detection swipes
