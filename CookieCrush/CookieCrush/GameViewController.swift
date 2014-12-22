@@ -45,7 +45,7 @@ class GameViewController: UIViewController {
         scene.scaleMode = .AspectFill
         scene.swipeHandler = handleSwipe
         
-        level = Level(filename: "Level_3")
+        level = Level(filename: "Level_1")
         scene.level = level
         scene.addTiles()
         skView.presentScene(scene)
@@ -60,6 +60,7 @@ class GameViewController: UIViewController {
         if level.isPossibleSwap(swap) {
             level.perforSwap(swap)
             scene.animateSwap(swap) {
+                self.handleMatches()
                 self.view.userInteractionEnabled = true
             }
         } else {
@@ -68,4 +69,20 @@ class GameViewController: UIViewController {
             }
         }
     }
+    
+    func handleMatches() {
+        let chains = level.removeMatches()
+        
+        scene.animateMatchedCookies(chains) {
+            let columns = self.level.fillHoles()
+            self.scene.animateFallingCookies(columns) {
+                let columns = self.level.topUpCookies()
+                self.scene.animateNewCookies(columns) {
+                    self.view.userInteractionEnabled = true
+                }
+            }
+        }
+    }
+    
+
 }

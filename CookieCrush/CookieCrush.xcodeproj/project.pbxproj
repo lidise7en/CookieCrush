@@ -34,6 +34,7 @@
 		57009FFC1A40B9C200D870B5 /* Ka-Ching.wav in Resources */ = {isa = PBXBuildFile; fileRef = 57009FF61A40B9C200D870B5 /* Ka-Ching.wav */; };
 		57009FFD1A40B9C200D870B5 /* Mining by Moonlight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 57009FF71A40B9C200D870B5 /* Mining by Moonlight.mp3 */; };
 		57009FFE1A40B9C200D870B5 /* Scrape.wav in Resources */ = {isa = PBXBuildFile; fileRef = 57009FF81A40B9C200D870B5 /* Scrape.wav */; };
+		5700A0001A40BDC700D870B5 /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57009FFF1A40BDC700D870B5 /* Chain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		57009FF61A40B9C200D870B5 /* Ka-Ching.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Ka-Ching.wav"; sourceTree = "<group>"; };
 		57009FF71A40B9C200D870B5 /* Mining by Moonlight.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Mining by Moonlight.mp3"; sourceTree = "<group>"; };
 		57009FF81A40B9C200D870B5 /* Scrape.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Scrape.wav; sourceTree = "<group>"; };
+		57009FFF1A40BDC700D870B5 /* Chain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 				57009FB31A3E5FAE00D870B5 /* AppDelegate.swift */,
 				57009FB51A3E5FAE00D870B5 /* GameScene.sks */,
 				57009FB71A3E5FAE00D870B5 /* GameScene.swift */,
+				57009FFF1A40BDC700D870B5 /* Chain.swift */,
 				57009FD91A3E6B0200D870B5 /* Cookie.swift */,
 				57009FDB1A3E6EB000D870B5 /* Array2D.swift */,
 				57009FDD1A3E752700D870B5 /* Set.swift */,
@@ -307,6 +310,7 @@
 				57009FF11A3F7E1100D870B5 /* swap.swift in Sources */,
 				57009FB81A3E5FAE00D870B5 /* GameScene.swift in Sources */,
 				57009FEF1A3EB31300D870B5 /* Extensions.swift in Sources */,
+				5700A0001A40BDC700D870B5 /* Chain.swift in Sources */,
 				57009FE01A3E76AA00D870B5 /* Level.swift in Sources */,
 				57009FDA1A3E6B0200D870B5 /* Cookie.swift in Sources */,
 				57009FED1A3E9A5900D870B5 /* Tile.swift in Sources */,
