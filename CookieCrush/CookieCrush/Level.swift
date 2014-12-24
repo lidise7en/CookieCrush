@@ -180,7 +180,7 @@ class Level {
                             do {
                                 chain.addCookie(cookies[column, row]!)
                                 ++column
-                            } while column <  NumColumns - 2 && cookies[column, row]?.cookieType == matchType
+                            } while column <  NumColumns && cookies[column, row]?.cookieType == matchType
                             result.addElement(chain)
                             continue
                     }
@@ -203,7 +203,7 @@ class Level {
                             do {
                                 chain.addCookie(cookies[column, row]!)
                                 ++row
-                            } while row < NumRows - 2 && cookies[column, row]?.cookieType == matchType
+                            } while row < NumRows && cookies[column, row]?.cookieType == matchType
                             result.addElement(chain)
                             continue
                     }
@@ -220,7 +220,7 @@ class Level {
         
         removeCookies(horizonMatches)
         removeCookies(verticalMatches)
-        return detectHorizonMatches().unionSet(detectVerticalMatches())
+        return horizonMatches.unionSet(verticalMatches)
     }
     
     private func removeCookies(chains: Set<Chain>) {
@@ -245,6 +245,7 @@ class Level {
                             cookies[column, row] = cookie
                             cookie.row = row
                             array.append(cookie)
+                            break
                         }
                     }
                 }

@@ -241,9 +241,9 @@ class GameScene: SKScene {
                     }
                 }
             }
-            runAction(matchSound)
         }
-        runAction(SKAction.waitForDuration(0.2), completion: completion)
+        runAction(matchSound)
+        runAction(SKAction.waitForDuration(0.3), completion: completion)
     }
     
     func animateFallingCookies(columns: [[Cookie]], completion: () -> ()) {
@@ -257,7 +257,7 @@ class GameScene: SKScene {
                 
                 longestDuration = max(longestDuration, delay + duration)
                 
-                let moveAction = SKAction.moveTo(newPos, duration: delay)
+                let moveAction = SKAction.moveTo(newPos, duration: duration)
                 
                 moveAction.timingMode = .EaseOut
                 
