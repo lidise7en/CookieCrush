@@ -13,8 +13,21 @@ class GameViewController: UIViewController {
 
     var scene: GameScene!
     var level: Level!
+    var movesLeft = 0
+    var scores = 0
+    var gestureTapRecognizer: UITapGestureRecognizer!
     
+    @IBOutlet weak var target: UILabel!
+
+    @IBOutlet weak var movs: UILabel!
+    
+    @IBOutlet weak var score: UILabel!
+    
+    @IBOutlet weak var GameOverBanner: UIImageView!
     func beginGame() {
+        movesLeft = level.maxMoves
+        scores = 0
+        updateLabels()
         shuffle()
     }
     
@@ -48,6 +61,7 @@ class GameViewController: UIViewController {
         level = Level(filename: "Level_1")
         scene.level = level
         scene.addTiles()
+        GameOverBanner.hidden = true
         skView.presentScene(scene)
         
         beginGame()
@@ -74,6 +88,10 @@ class GameViewController: UIViewController {
             return
         }
         scene.animateMatchedCookies(chains) {
+            for chain in chains {
+                self.scores += chain.score
+            }
+            self.updateLabels()
             let columns = self.level.fillHoles()
             self.scene.animateFallingCookies(columns) {
                 let columns = self.level.topUpCookies()
@@ -85,9 +103,44 @@ class GameViewController: UIViewController {
     }
     
     func beginNextTurn() {
+        level.resetComboNum()
         level.detectPossibleSwaps()
         view.userInteractionEnabled = true
+        decreseMove()
     }
     
-
+    func updateLabels() {
+        target.text = NSString(format: "%ld", level.targetScore)
+        movs.text = NSString(format: "%ld", movesLeft)
+        score.text = NSString(format: "%ld", scores)
+    }
+    
+    func showGameOver() {
+        GameOverBanner.hidden = false
+        scene.userInteractionEnabled = false
+        gestureTapRecognizer = UITapGestureRecognizer(target: self, action: "hideGameOver")
+        view.addGestureRecognizer(gestureTapRecognizer)
+        
+    }
+    
+    func hideGameOver() {
+        view.removeGestureRecognizer(gestureTapRecognizer)
+        gestureTapRecognizer = nil
+        
+        GameOverBanner.hidden = true
+        scene.userInteractionEnabled = true
+        beginGame()
+    }
+    
+    func decreseMove() {
+        movesLeft -= 1
+        updateLabels()
+        if scores > level.targetScore {
+            GameOverBanner.image = UIImage(named: "LevelComplete")
+            showGameOver()
+        } else if movesLeft == 0 {
+            GameOverBanner.image = UIImage(named: "GameOver")
+            showGameOver()
+        }
+    }
 }

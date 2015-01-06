@@ -32,6 +32,7 @@ class GameScene: SKScene {
     
     
     override init(size: CGSize) {
+        SKLabelNode(fontNamed: "GillSans-BoldItalic")
         super.init(size: size)
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
@@ -232,6 +233,7 @@ class GameScene: SKScene {
     
     func animateMatchedCookies(chains: Set<Chain>, completion: () -> ()) {
         for chain in chains {
+            animateScoreForChain(chain)
             for cookie in chain.cookies {
                 if let sprite = cookie.sprite {
                     if sprite.actionForKey("removing") == nil {
@@ -296,5 +298,25 @@ class GameScene: SKScene {
             }
         }
         runAction(SKAction.waitForDuration(longestDuration), completion)
+    }
+    
+    func animateScoreForChain(chain: Chain) {
+        let firstSprite = chain.firstCookie().sprite!
+        let lastSprite = chain.lastCookie().sprite!
+        
+        let centerPos = CGPoint(
+            x: (firstSprite.position.x + lastSprite.position.x) / 2,
+            y: (firstSprite.position.y + lastSprite.position.y) / 2 - 8)
+        
+        let scoreLabel = SKLabelNode(fontNamed: "GillSans-BoldItalic")
+        scoreLabel.fontSize = 16
+        scoreLabel.text = NSString(format: "%ld", chain.score)
+        scoreLabel.position = centerPos
+        scoreLabel.zPosition = 300
+        cookiesLayer.addChild(scoreLabel)
+        
+        let moveAction = SKAction.moveBy(CGVector(dx: 0, dy: 3), duration: 0.7)
+        moveAction.timingMode = .EaseOut
+        scoreLabel.runAction(SKAction.sequence([moveAction, SKAction.removeFromParent()]))
     }
 }

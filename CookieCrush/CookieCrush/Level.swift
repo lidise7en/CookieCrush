@@ -12,9 +12,14 @@ let NumColumns = 9
 let NumRows = 9
 
 class Level {
+    
+    let targetScore: Int!
+    let maxMoves: Int!
+    
     private var cookies = Array2D<Cookie>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
     private var possibleSwaps = Set<Swap>()
+    private var comboNum = 1
     
     init(filename: String) {
         if let dictionary = Dictionary<String, AnyObject>.loadJSONFromBundle(filename) {
@@ -27,6 +32,8 @@ class Level {
                         }
                     }
                 }
+                targetScore = (dictionary["targetScore"] as NSNumber).integerValue
+                maxMoves = (dictionary["moves"] as NSNumber).integerValue
             }
         }
     }
@@ -220,6 +227,8 @@ class Level {
         
         removeCookies(horizonMatches)
         removeCookies(verticalMatches)
+        calculateScores(horizonMatches)
+        calculateScores(verticalMatches)
         return horizonMatches.unionSet(verticalMatches)
     }
     
@@ -285,5 +294,16 @@ class Level {
             }
         }
         return columns
+    }
+    
+    private func calculateScores(chains: Set<Chain>) {
+        for chain in chains {
+            chain.score = 60 * (chain.length() - 2) * comboNum
+            comboNum += 1
+        }
+    }
+    
+    func resetComboNum() {
+        comboNum = 1
     }
 }

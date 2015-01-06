@@ -10,6 +10,7 @@ import Foundation
 
 
 class Chain: Hashable, Printable {
+    var score = 0
     var cookies = [Cookie]()
     
     enum ChainType: Printable {
