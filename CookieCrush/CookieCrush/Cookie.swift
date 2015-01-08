@@ -9,7 +9,8 @@
 import SpriteKit
 
 enum CookieType: Int, Printable {
-    case Unknown = 0, Croissant, Cupcake, Danish, Donut, Macaroon, SugarCookie
+    case Unknown = 0, Croissant, Cupcake, Danish, Donut, Macaroon, SugarCookie, Croissant_Combo,
+        Cupcake_Combo, Danish_Combo, Donut_Combo, Macaroon_Combo, SugarCookie_Combo
     
     var spriteName: String {
         let spriteNames = [
@@ -18,7 +19,13 @@ enum CookieType: Int, Printable {
             "Danish",
             "Donut",
             "Macaroon",
-            "SugarCookie"]
+            "SugarCookie",
+            "Croissant_Combo",
+            "Cupcake_Combo",
+            "Danish_Combo",
+            "Donut_Combo",
+            "Macaroon_Combo",
+            "SugarCookie_Combo"]
         
         return spriteNames[rawValue - 1]
     }
@@ -39,7 +46,7 @@ enum CookieType: Int, Printable {
 class Cookie: Hashable, Printable {
     var column: Int
     var row: Int
-    let cookieType: CookieType
+    var cookieType: CookieType
     var sprite: SKSpriteNode?
     var hashValue: Int {return row * 10 + column}
     
@@ -51,6 +58,26 @@ class Cookie: Hashable, Printable {
         self.column = column
         self.row = row
         self.cookieType = cookieType
+    }
+    
+    func setType(cookietype: CookieType) {
+        self.cookieType = cookietype
+    }
+    
+    func changeTypeToCombo() {
+        if self.cookieType == CookieType.Croissant {
+            self.cookieType = CookieType.Croissant_Combo
+        } else if self.cookieType == CookieType.Cupcake {
+            self.cookieType = CookieType.Cupcake_Combo
+        } else if self.cookieType == CookieType.Danish {
+            self.cookieType = CookieType.Danish_Combo
+        } else if self.cookieType == CookieType.Donut {
+            self.cookieType = CookieType.Donut_Combo
+        } else if self.cookieType == CookieType.Macaroon {
+            self.cookieType = CookieType.Macaroon_Combo
+        } else if self.cookieType == CookieType.SugarCookie {
+            self.cookieType = CookieType.SugarCookie_Combo
+        }
     }
 }
 

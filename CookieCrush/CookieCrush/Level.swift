@@ -234,8 +234,18 @@ class Level {
     
     private func removeCookies(chains: Set<Chain>) {
         for chain in chains {
-            for cookie in chain.cookies {
-                cookies[cookie.column, cookie.row] = nil
+            if chain.length() == 4 {
+                for cookie in chain.cookies {
+                    if cookie == chain.firstCookie() {
+                        cookies[cookie.column, cookie.row]?.changeTypeToCombo()
+                    } else {
+                        cookies[cookie.column, cookie.row] = nil
+                    }
+                }
+            } else {
+                for cookie in chain.cookies {
+                    cookies[cookie.column, cookie.row] = nil
+                }
             }
         }
     }

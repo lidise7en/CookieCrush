@@ -235,14 +235,29 @@ class GameScene: SKScene {
         for chain in chains {
             animateScoreForChain(chain)
             for cookie in chain.cookies {
-                if let sprite = cookie.sprite {
-                    if sprite.actionForKey("removing") == nil {
-                        let scaleAction = SKAction.scaleTo(0.1, duration: 0.3)
-                        scaleAction.timingMode = .EaseOut
-                        sprite.runAction(SKAction.sequence([scaleAction, SKAction.removeFromParent()]), withKey: "removing")
+                if chain.length() == 4 && cookie == chain.firstCookie() {
+                    if let sprite = cookie.sprite {
+                        if sprite.actionForKey("removing") == nil {
+                            let newSprite = SKSpriteNode(imageNamed: cookie.cookieType.spriteName)
+                            newSprite.position = pointForColumn(cookie.column, row: cookie.row)
+                            let scaleAction = SKAction.scaleTo(0.1, duration: 0.2)
+                            scaleAction.timingMode = .EaseOut
+                            sprite.runAction(SKAction.sequence([scaleAction, SKAction.removeFromParent()]), withKey: "removing")
+                            cookiesLayer.addChild(newSprite)
+                            cookie.sprite = newSprite
+                        }
+                    }
+                } else {
+                    if let sprite = cookie.sprite {
+                        if sprite.actionForKey("removing") == nil {
+                            let scaleAction = SKAction.scaleTo(0.1, duration: 0.3)
+                            scaleAction.timingMode = .EaseOut
+                            sprite.runAction(SKAction.sequence([scaleAction, SKAction.removeFromParent()]), withKey: "removing")
+                        }
                     }
                 }
             }
+
         }
         runAction(matchSound)
         runAction(SKAction.waitForDuration(0.3), completion: completion)
