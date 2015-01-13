@@ -13,6 +13,10 @@ enum CookieType: Int, Printable {
         Cupcake_Combo, Danish_Combo, Donut_Combo, Macaroon_Combo, SugarCookie_Combo
     
     var spriteName: String {
+        if rawValue == 0 {
+            return "Unknown"
+        }
+        
         let spriteNames = [
             "Croissant",
             "Cupcake",
@@ -41,6 +45,20 @@ enum CookieType: Int, Printable {
     static func random() -> CookieType {
         return CookieType(rawValue: Int(arc4random_uniform(6)) + 1)!
     }
+}
+
+func == (lhs: CookieType, rhs: CookieType) -> Bool {
+
+    var desOne = lhs.description
+    var desTwo = rhs.description
+    if desOne == desTwo {
+        return true
+    } else if (desOne.hasPrefix(desTwo)) {
+        return true
+    } else if (desTwo.hasPrefix(desOne)) {
+        return true
+    }
+    return false
 }
 
 class Cookie: Hashable, Printable {

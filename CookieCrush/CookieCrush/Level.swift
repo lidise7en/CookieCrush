@@ -147,11 +147,27 @@ class Level {
     private func hasChainOverThree(column: Int, row: Int) -> Bool {
         let cookieType = cookies[column, row]!.cookieType
         var horizLen = 1
-        for var i = column - 1; i >= 0 && cookies[i ,row]?.cookieType == cookieType; --i, ++horizLen {
-            
+        for var i = column - 1; i >= 0 && cookies[i, row]?.cookieType == cookieType; --i, ++horizLen {
+            let desOne = cookies[i, row]?.cookieType.description
+            let desTwo = cookieType.description
+            if (desOne?.hasPrefix(desTwo) != nil) {
+                
+            } else if (desTwo.hasPrefix(desOne!)) {
+                
+            } else {
+                break
+            }
         }
-        for var i = column + 1;i < NumColumns && cookies[i ,row]?.cookieType == cookieType; ++i, ++horizLen {
-        
+        for var i = column + 1;i < NumColumns && cookies[i, row]?.cookieType == cookieType; ++i, ++horizLen {
+            let desOne = cookies[i, row]?.cookieType.description
+            let desTwo = cookieType.description
+            if (desOne?.hasPrefix(desTwo) != nil) {
+                
+            } else if (desTwo.hasPrefix(desOne!)) {
+                
+            } else {
+                break
+            }
         }
         if horizLen >= 3 {
             return true
@@ -159,10 +175,28 @@ class Level {
         
         var vertiLen = 1
         for var i = row - 1;i >= 0 && cookies[column, i]?.cookieType == cookieType; --i, ++vertiLen {
-
+            let desOne = cookies[column, i]?.cookieType.description
+            let desTwo = cookieType.description
+            
+            if (desOne?.hasPrefix(desTwo) != nil) {
+                
+            } else if (desTwo.hasPrefix(desOne!)) {
+                
+            } else {
+                break
+            }
         }
         for var i = row + 1;i < NumRows && cookies[column, i]?.cookieType == cookieType; ++i, ++vertiLen {
+            let desOne = cookies[column, i]?.cookieType.description
+            let desTwo = cookieType.description
             
+            if (desOne?.hasPrefix(desTwo) != nil) {
+                
+            } else if (desTwo.hasPrefix(desOne!)) {
+                
+            } else {
+                break
+            }
         }
         if vertiLen >= 3 {
             return true
@@ -176,17 +210,28 @@ class Level {
     
     private func detectHorizonMatches() -> Set<Chain> {
         var result = Set<Chain>()
-        
         for row in 0..<NumRows {
             for var column = 0; column < NumColumns - 2; {
                 if let cookie = cookies[column, row] {
                     let matchType = cookie.cookieType
-                    if cookies[column + 1, row]?.cookieType == matchType
-                        && cookies[column + 2, row]?.cookieType == matchType {
+                    
+                    if  cookies[column + 1, row]?.cookieType == matchType && 
+                        cookies[column + 2, row]?.cookieType == matchType {
                             let chain = Chain(chainType: .Horizontal)
                             do {
+                                var des = cookies[column, row]?.cookieType.description
+                                if des!.hasSuffix("Combo") {
+                                    chain.clearCookies()
+                                    for column = 0; column < NumColumns; ++column {
+                                        if tiles[column, row] != nil {
+                                            chain.addCookie(cookies[column, row]!)
+                                        }
+                                    }
+                                    break
+                                }
                                 chain.addCookie(cookies[column, row]!)
                                 ++column
+                                
                             } while column <  NumColumns && cookies[column, row]?.cookieType == matchType
                             result.addElement(chain)
                             continue
@@ -208,6 +253,16 @@ class Level {
                         cookies[column, row + 2]?.cookieType == matchType {
                             let chain = Chain(chainType: .Vertical)
                             do {
+                                var des = cookies[column, row]?.cookieType.description
+                                if des!.hasSuffix("Combo") {
+                                    chain.clearCookies()
+                                    for row = 0; row < NumRows; ++row {
+                                        if tiles[column, row] != nil {
+                                            chain.addCookie(cookies[column, row]!)
+                                        }
+                                    }
+                                    break
+                                }
                                 chain.addCookie(cookies[column, row]!)
                                 ++row
                             } while row < NumRows && cookies[column, row]?.cookieType == matchType

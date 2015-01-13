@@ -56,6 +56,10 @@ class Chain: Hashable, Printable {
             $0.hashValue ^ $1.hashValue
         }
     }
+    
+    func clearCookies() {
+        self.cookies = [Cookie]()
+    }
 }
 
 func ==(lhs: Chain, rhs: Chain) -> Bool {
