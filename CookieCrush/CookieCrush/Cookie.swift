@@ -10,7 +10,7 @@ import SpriteKit
 
 enum CookieType: Int, Printable {
     case Unknown = 0, Croissant, Cupcake, Danish, Donut, Macaroon, SugarCookie, Croissant_Combo,
-        Cupcake_Combo, Danish_Combo, Donut_Combo, Macaroon_Combo, SugarCookie_Combo
+        Cupcake_Combo, Danish_Combo, Donut_Combo, Macaroon_Combo, SugarCookie_Combo, Super
     
     var spriteName: String {
         if rawValue == 0 {
@@ -29,7 +29,8 @@ enum CookieType: Int, Printable {
             "Danish_Combo",
             "Donut_Combo",
             "Macaroon_Combo",
-            "SugarCookie_Combo"]
+            "SugarCookie_Combo",
+            "Super"]
         
         return spriteNames[rawValue - 1]
     }
@@ -96,6 +97,10 @@ class Cookie: Hashable, Printable {
         } else if self.cookieType == CookieType.SugarCookie {
             self.cookieType = CookieType.SugarCookie_Combo
         }
+    }
+    
+    func changeTypeToSuper() {
+        self.cookieType = CookieType.Super
     }
 }
 

@@ -115,7 +115,7 @@ class Level {
                             cookies[column, row] = other
                             cookies[column + 1, row] = cookie
                             
-                            if hasChainOverThree(column, row: row) || hasChainOverThree(column + 1, row: row) {
+                            if hasChainOverThree(column, row: row) || hasChainOverThree(column + 1, row: row) || isSuperComboSwap(cookie, other: other) {
                                 set.addElement(Swap(cookieA: cookie, cookieB: other))
                             }
                             
@@ -129,7 +129,7 @@ class Level {
                             cookies[column, row] = other
                             cookies[column, row + 1] = cookie
                             
-                            if hasChainOverThree(column, row: row) || hasChainOverThree(column, row: row + 1) {
+                            if hasChainOverThree(column, row: row) || hasChainOverThree(column, row: row + 1) || isSuperComboSwap(cookie, other: other){
                                 set.addElement(Swap(cookieA: cookie, cookieB: other))
                             }
                             
@@ -141,6 +141,11 @@ class Level {
             }
         }
         possibleSwaps = set
+    }
+    
+    //detect possible swap for super cookie
+    func isSuperComboSwap(cookie: Cookie, other: Cookie) -> Bool {
+        return cookie.cookieType == CookieType.Super || other.cookieType == CookieType.Super
     }
     
     //helper class for detection swipes
@@ -240,6 +245,34 @@ class Level {
                 ++column
             }
         }
+        
+        for row in 0..<NumRows {
+            for var column = 0; column < NumColumns - 1; ++column {
+                if let cookie = cookies[column, row] {
+                    if cookie.cookieType == CookieType.Super || cookies[column + 1, row]?.cookieType == CookieType.Super {
+                            let chain = Chain(chainType: .Horizontal)
+                            var type = cookies[column + 1, row]?.cookieType
+                            if cookie.cookieType != CookieType.Super {
+                                type = cookie.cookieType
+                                chain.addCookie(cookies[column + 1, row]!)
+                            } else {
+                                chain.addCookie(cookies[column, row]!)
+                            }
+                        
+                            for var i = 0; i < NumRows; ++i {
+                                for var j = 0;j < NumColumns; ++j {
+                                    if let cookieInner = cookies[j, i] {
+                                        if cookieInner.cookieType == type {
+                                            chain.addCookie(cookies[j, i]!)
+                                        }
+                                    }
+                                }
+                            }
+                            result.addElement(chain)
+                    }
+                }
+            }
+        }
         return result
     }
     
@@ -273,6 +306,35 @@ class Level {
                 ++row
             }
         }
+        
+        for column in 0..<NumColumns {
+            for var row = 0; row < NumRows - 1; ++row {
+                if let cookie = cookies[column, row] {
+                    if cookie.cookieType == CookieType.Super || cookies[column, row + 1]?.cookieType == CookieType.Super {
+                        let chain = Chain(chainType: .Vertical)
+                        
+                        var type = cookies[column, row + 1]?.cookieType
+                        if cookie.cookieType != CookieType.Super {
+                            type = cookie.cookieType
+                            chain.addCookie(cookies[column, row + 1]!)
+                        } else {
+                            chain.addCookie(cookies[column, row]!)
+                        }
+                        
+                        for var i = 0;i < NumRows; ++i {
+                            for var j = 0;j < NumColumns; ++j {
+                                if let cookieInner = cookies[j, i] {
+                                    if cookieInner.cookieType == type {
+                                        chain.addCookie(cookies[j, i]!)
+                                    }
+                                }
+                            }
+                        }
+                        result.addElement(chain)
+                    }
+                }
+            }
+        }
         return result
     }
     
@@ -289,10 +351,18 @@ class Level {
     
     private func removeCookies(chains: Set<Chain>) {
         for chain in chains {
-            if chain.length() == 4 {
+            if chain.length() == 4 && hasSpecialCookie(chain) == false {
                 for cookie in chain.cookies {
                     if cookie == chain.firstCookie() {
                         cookies[cookie.column, cookie.row]?.changeTypeToCombo()
+                    } else {
+                        cookies[cookie.column, cookie.row] = nil
+                    }
+                }
+            } else if chain.length() >= 5 && hasSpecialCookie(chain) == false {
+                for cookie in chain.cookies {
+                    if cookie == chain.firstCookie() {
+                        cookies[cookie.column, cookie.row]?.changeTypeToSuper()
                     } else {
                         cookies[cookie.column, cookie.row] = nil
                     }
@@ -303,6 +373,16 @@ class Level {
                 }
             }
         }
+    }
+    
+    private func hasSpecialCookie(chain: Chain) -> Bool {
+        var cookieList = chain.cookies
+        for cookie in cookieList {
+            if cookie.cookieType == CookieType.Super || cookie.cookieType.description.hasSuffix("Combo") {
+                return true
+            }
+        }
+        return false
     }
     
     func fillHoles() -> [[Cookie]] {
